@@ -1,0 +1,65 @@
+var nums = {
+  0: 'zero',
+  1: 'one',
+  2: 'two',
+  3: 'three',
+  4: 'four',
+  5: 'five',
+  6: 'six',
+  7: 'seven',
+  8: 'eight',
+  9: 'nine'
+}
+
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      num: 0
+    };
+  };
+  render() {
+    var numKeys = [];
+    for (let i=0; i<=9; i++) {
+      numKeys.push(
+        <RenderNumKey keyName={nums[i]} keyNum={i} />
+      )
+    }
+    return(
+      <div>
+        Calculator
+        <div>{this.state.num}</div>
+        <RenderKey keyName="equals" keyValue="=" />
+        {numKeys}
+        <RenderKey keyName="add" keyValue="+" />
+        <RenderKey keyName="subtract" keyValue="-" />
+        <RenderKey keyName="multiply" keyValue="*" />
+        <RenderKey keyName="divide" keyValue="/" />
+      </div>
+    );
+  }
+};
+
+class RenderKey extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render(){
+    return(
+    <button id={this.props.keyName}>{this.props.keyValue}</button>
+    );
+  }
+}
+
+class RenderNumKey extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <button id={this.props.keyName}>{this.props.keyNum}</button>
+    );
+  }
+}
+
+ReactDOM.render(<Calculator />, document.getElementById('calculator'));
