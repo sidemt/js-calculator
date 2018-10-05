@@ -15,26 +15,66 @@ class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      num: 0
+      input: '0'
     };
+    this.handleClick = this.handleClick.bind(this);
+    this.clear = this.clear.bind(this);
+    this.dot = this.dot.bind(this);
   };
+  clear(){
+    this.setState({
+      input: '0'
+    });
+  }
+  dot(){
+    if (this.state.input.indexOf(".") == -1) {
+      this.setState({
+        input: this.state.input + "."
+      });
+    };
+  }
+  handleClick(event){
+    this.setState({
+      input: this.state.input + event.target.innerText
+    });
+  }
   render() {
     var numKeys = [];
     for (let i=0; i<=9; i++) {
       numKeys.push(
-        <RenderNumKey keyName={nums[i]} keyNum={i} />
+        <RenderNumKey keyName={nums[i]} keyNum={i} onClick={this.handleClick} />
       )
     }
     return(
       <div>
         Calculator
-        <div>{this.state.num}</div>
-        <RenderKey keyName="equals" keyValue="=" />
-        {numKeys}
-        <RenderKey keyName="add" keyValue="+" />
-        <RenderKey keyName="subtract" keyValue="-" />
-        <RenderKey keyName="multiply" keyValue="*" />
-        <RenderKey keyName="divide" keyValue="/" />
+        <div>test: {this.state.input}</div>
+        <div class="row">
+          <div id="display">{parseFloat(this.state.input, 10)}</div>
+        </div>
+        
+        <div class="row">
+          <RenderKey keyName="clear" keyValue="AC" onClick={this.clear} />
+          <RenderKey keyName="divide" keyValue="/" />
+          <RenderKey keyName="multiply" keyValue="*" />
+          <RenderKey keyName="add" keyValue="+" />
+          <RenderKey keyName="subtract" keyValue="-" />
+        </div>
+        
+        <div class="row">
+          {numKeys[7]}{numKeys[8]}{numKeys[9]}
+        </div>
+        <div class="row">
+          {numKeys[4]}{numKeys[5]}{numKeys[6]}
+        </div>
+        <div class="row">
+          {numKeys[1]}{numKeys[2]}{numKeys[3]}
+        </div>
+        <div class="row">
+          {numKeys[0]}
+          <RenderKey keyName="decimal" keyValue="." onClick={this.dot} />
+          <RenderKey keyName="equals" keyValue="=" />
+        </div>
       </div>
     );
   }
@@ -46,7 +86,7 @@ class RenderKey extends React.Component {
   }
   render(){
     return(
-    <button id={this.props.keyName}>{this.props.keyValue}</button>
+    <button id={this.props.keyName} onClick={this.props.onClick}>{this.props.keyValue}</button>
     );
   }
 }
@@ -57,7 +97,7 @@ class RenderNumKey extends React.Component {
   }
   render() {
     return (
-      <button id={this.props.keyName}>{this.props.keyNum}</button>
+      <button id={this.props.keyName} onClick={this.props.onClick}>{this.props.keyNum}</button>
     );
   }
 }

@@ -15,26 +15,66 @@ Calculator = function (_React$Component) {_inherits(Calculator, _React$Component
   function Calculator(props) {_classCallCheck(this, Calculator);var _this = _possibleConstructorReturn(this, (Calculator.__proto__ || Object.getPrototypeOf(Calculator)).call(this,
     props));
     _this.state = {
-      num: 0 };return _this;
+      input: '0' };
 
-  }_createClass(Calculator, [{ key: 'render', value: function render()
+    _this.handleClick = _this.handleClick.bind(_this);
+    _this.clear = _this.clear.bind(_this);
+    _this.dot = _this.dot.bind(_this);return _this;
+  }_createClass(Calculator, [{ key: 'clear', value: function clear()
+    {
+      this.setState({
+        input: '0' });
+
+    } }, { key: 'dot', value: function dot()
+    {
+      if (this.state.input.indexOf(".") == -1) {
+        this.setState({
+          input: this.state.input + "." });
+
+      };
+    } }, { key: 'handleClick', value: function handleClick(
+    event) {
+      this.setState({
+        input: this.state.input + event.target.innerText });
+
+    } }, { key: 'render', value: function render()
     {
       var numKeys = [];
       for (var i = 0; i <= 9; i++) {
         numKeys.push(
-        React.createElement(RenderNumKey, { keyName: nums[i], keyNum: i }));
+        React.createElement(RenderNumKey, { keyName: nums[i], keyNum: i, onClick: this.handleClick }));
 
       }
       return (
         React.createElement('div', null, 'Calculator',
 
-          React.createElement('div', null, this.state.num),
-          React.createElement(RenderKey, { keyName: 'equals', keyValue: '=' }),
-          numKeys,
-          React.createElement(RenderKey, { keyName: 'add', keyValue: '+' }),
-          React.createElement(RenderKey, { keyName: 'subtract', keyValue: '-' }),
-          React.createElement(RenderKey, { keyName: 'multiply', keyValue: '*' }),
-          React.createElement(RenderKey, { keyName: 'divide', keyValue: '/' })));
+          React.createElement('div', null, 'test: ', this.state.input),
+          React.createElement('div', { 'class': 'row' },
+            React.createElement('div', { id: 'display' }, parseFloat(this.state.input, 10))),
+
+
+          React.createElement('div', { 'class': 'row' },
+            React.createElement(RenderKey, { keyName: 'clear', keyValue: 'AC', onClick: this.clear }),
+            React.createElement(RenderKey, { keyName: 'divide', keyValue: '/' }),
+            React.createElement(RenderKey, { keyName: 'multiply', keyValue: '*' }),
+            React.createElement(RenderKey, { keyName: 'add', keyValue: '+' }),
+            React.createElement(RenderKey, { keyName: 'subtract', keyValue: '-' })),
+
+
+          React.createElement('div', { 'class': 'row' },
+            numKeys[7], numKeys[8], numKeys[9]),
+
+          React.createElement('div', { 'class': 'row' },
+            numKeys[4], numKeys[5], numKeys[6]),
+
+          React.createElement('div', { 'class': 'row' },
+            numKeys[1], numKeys[2], numKeys[3]),
+
+          React.createElement('div', { 'class': 'row' },
+            numKeys[0],
+            React.createElement(RenderKey, { keyName: 'decimal', keyValue: '.', onClick: this.dot }),
+            React.createElement(RenderKey, { keyName: 'equals', keyValue: '=' }))));
+
 
 
     } }]);return Calculator;}(React.Component);
@@ -46,7 +86,7 @@ RenderKey = function (_React$Component2) {_inherits(RenderKey, _React$Component2
   }_createClass(RenderKey, [{ key: 'render', value: function render()
     {
       return (
-        React.createElement('button', { id: this.props.keyName }, this.props.keyValue));
+        React.createElement('button', { id: this.props.keyName, onClick: this.props.onClick }, this.props.keyValue));
 
     } }]);return RenderKey;}(React.Component);var
 
@@ -57,7 +97,7 @@ RenderNumKey = function (_React$Component3) {_inherits(RenderNumKey, _React$Comp
   }_createClass(RenderNumKey, [{ key: 'render', value: function render()
     {
       return (
-        React.createElement('button', { id: this.props.keyName }, this.props.keyNum));
+        React.createElement('button', { id: this.props.keyName, onClick: this.props.onClick }, this.props.keyNum));
 
     } }]);return RenderNumKey;}(React.Component);
 
