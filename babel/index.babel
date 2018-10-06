@@ -15,15 +15,18 @@ class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: '0'
+      input: ''
     };
     this.handleClick = this.handleClick.bind(this);
     this.clear = this.clear.bind(this);
     this.dot = this.dot.bind(this);
+    this.zero = this.zero.bind(this);
+    this.calculate = this.calculate.bind(this);
+    this.equals = this.equals.bind(this);
   };
   clear(){
     this.setState({
-      input: '0'
+      input: ''
     });
   }
   dot(){
@@ -33,9 +36,29 @@ class Calculator extends React.Component {
       });
     };
   }
+  zero(){
+    if (this.state.input != '0') {
+      this.setState({
+        input: this.state.input + '0'
+      });
+    };
+  }
   handleClick(event){
     this.setState({
       input: this.state.input + event.target.innerText
+    });
+  }
+  calculate(str){
+    if (str != undefined) {
+      var f = new Function('return ' + str + ';');
+      return f();
+    } else {
+      return 0; 
+    }
+  }
+  equals() {
+    this.setState({
+      input: this.calculate(this.state.input)
     });
   }
   render() {
@@ -49,31 +72,31 @@ class Calculator extends React.Component {
       <div>
         Calculator
         <div>test: {this.state.input}</div>
-        <div class="row">
-          <div id="display">{parseFloat(this.state.input, 10)}</div>
+        <div className="row">
+          <div id="display">{this.state.input}</div>
         </div>
         
-        <div class="row">
+        <div className="row">
           <RenderKey keyName="clear" keyValue="AC" onClick={this.clear} />
-          <RenderKey keyName="divide" keyValue="/" />
-          <RenderKey keyName="multiply" keyValue="*" />
-          <RenderKey keyName="add" keyValue="+" />
-          <RenderKey keyName="subtract" keyValue="-" />
+          <RenderKey keyName="divide" keyValue="/" onClick={this.handleClick} />
+          <RenderKey keyName="multiply" keyValue="*" onClick={this.handleClick} />
+          <RenderKey keyName="add" keyValue="+" onClick={this.handleClick} />
+          <RenderKey keyName="subtract" keyValue="-" onClick={this.handleClick} />
         </div>
         
-        <div class="row">
+        <div className="row">
           {numKeys[7]}{numKeys[8]}{numKeys[9]}
         </div>
-        <div class="row">
+        <div className="row">
           {numKeys[4]}{numKeys[5]}{numKeys[6]}
         </div>
-        <div class="row">
+        <div className="row">
           {numKeys[1]}{numKeys[2]}{numKeys[3]}
         </div>
-        <div class="row">
-          {numKeys[0]}
+        <div className="row">
+          <RenderNumKey keyName={nums[0]} keyNum={0} onClick={this.zero} />
           <RenderKey keyName="decimal" keyValue="." onClick={this.dot} />
-          <RenderKey keyName="equals" keyValue="=" />
+          <RenderKey keyName="equals" keyValue="=" onClick={this.equals} />
         </div>
       </div>
     );
