@@ -11,11 +11,39 @@ var nums = {
   9: 'nine'
 }
 
-class Calculator extends React.Component {
+// Redux:
+const OPERATOR = 'OPERATOR';
+const NUMBER = 'NUMBER';
+const ADD = 'ADD';
+
+const addCalculations = (calc) => {
+  return {
+    type: ADD,
+    calculations: calc
+  }
+};
+
+const calculationReducer = (state = [], action) => {
+  switch(action.type){
+    case ADD:
+      return [...state, action.calclations]
+    default:
+      return state;
+  }
+}
+
+const store = Redux.createStore(calculationReducer);
+
+// React:
+const Provider = ReactRedux.Provider;
+const connect = ReactRedux.connect;
+
+class Presentational extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: ''
+      input: '0',
+      calculations: []
     };
     this.handleClick = this.handleClick.bind(this);
     this.clear = this.clear.bind(this);
@@ -23,6 +51,7 @@ class Calculator extends React.Component {
     this.zero = this.zero.bind(this);
     this.calculate = this.calculate.bind(this);
     this.equals = this.equals.bind(this);
+    this.submitCalculation = this.submitCalculation.bind(this);
   };
   clear(){
     this.setState({
@@ -61,6 +90,13 @@ class Calculator extends React.Component {
       input: this.calculate(this.state.input)
     });
   }
+  submitCalculation(){
+    const currentCalculation = this.state.input;
+    this.setState({
+      input: '',
+      calculations: this.state.calculations.concat(currentCalculation)
+    });
+  }
   render() {
     var numKeys = [];
     for (let i=0; i<=9; i++) {
@@ -71,11 +107,12 @@ class Calculator extends React.Component {
     return(
       <div>
         Calculator
-        <div>test: {this.state.input}</div>
+        <div>input: {this.state.input}</div>
+        <div>calculations: {this.state.calculations}</div>
         <div className="row">
           <div id="display">{this.state.input}</div>
         </div>
-        
+
         <div className="row">
           <RenderKey keyName="clear" keyValue="AC" onClick={this.clear} />
           <RenderKey keyName="divide" keyValue="/" onClick={this.handleClick} />
@@ -83,7 +120,7 @@ class Calculator extends React.Component {
           <RenderKey keyName="add" keyValue="+" onClick={this.handleClick} />
           <RenderKey keyName="subtract" keyValue="-" onClick={this.handleClick} />
         </div>
-        
+
         <div className="row">
           {numKeys[7]}{numKeys[8]}{numKeys[9]}
         </div>
@@ -97,6 +134,7 @@ class Calculator extends React.Component {
           <RenderNumKey keyName={nums[0]} keyNum={0} onClick={this.zero} />
           <RenderKey keyName="decimal" keyValue="." onClick={this.dot} />
           <RenderKey keyName="equals" keyValue="=" onClick={this.equals} />
+          <RenderKey keyName="submit" keyValue="submit" onClick={this.submitCalculation} />
         </div>
       </div>
     );
@@ -125,4 +163,32 @@ class RenderNumKey extends React.Component {
   }
 }
 
-ReactDOM.render(<Calculator />, document.getElementById('calculator'));
+
+// React-Redux:
+const mapStateToProps = (state) => {
+  return { calculations: state }
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    submitNewCalculations: (newCalc) => {
+      dispatch(addCalculations(newCalc))
+    }
+  }
+};
+
+
+
+const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
+
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <Provider store={store}>
+        <Container />
+      </Provider>
+    );
+  }
+};
+
+ReactDOM.render(<AppWrapper />, document.getElementById('calculator'));
