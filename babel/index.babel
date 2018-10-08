@@ -109,36 +109,31 @@ class Calculator extends React.Component {
       )
     }
     return(
-      <div>
-        Calculator
-        <div>input: {this.state.input}</div>
-        <div>calculations: {this.state.calculations}</div>
-        <div className="row">
-          <div id="display">{this.state.calculations}{this.state.input}</div>
-        </div>
+      <div className="grid-container">
+
+          <div id="display" className="grid-item item-display">{this.state.calculations}{this.state.input}</div>
+
         
-        <div className="row">
-          <RenderKey keyName="clear" keyValue="AC" onClick={this.clear} />
-          <RenderKey keyName="divide" keyValue="/" onClick={this.handleOperator} />
-          <RenderKey keyName="multiply" keyValue="*" onClick={this.handleOperator} />
-          <RenderKey keyName="add" keyValue="+" onClick={this.handleOperator} />
-          <RenderKey keyName="subtract" keyValue="-" onClick={this.handleOperator} />
-        </div>
+
+          <RenderKey keyName="clear" keyValue="AC" className="item-ac" onClick={this.clear} />
+          <RenderKey keyName="divide" keyValue="/" className="item-divide" onClick={this.handleOperator} />
+          <RenderKey keyName="multiply" keyValue="*" className="item-multiply" onClick={this.handleOperator} />
+          <RenderKey keyName="add" keyValue="+" className="item-add" onClick={this.handleOperator} />
+          <RenderKey keyName="subtract" keyValue="-" className="item-subtract"  onClick={this.handleOperator} />
+
         
-        <div className="row">
+
           {numKeys[7]}{numKeys[8]}{numKeys[9]}
-        </div>
-        <div className="row">
+
+
           {numKeys[4]}{numKeys[5]}{numKeys[6]}
-        </div>
-        <div className="row">
+
           {numKeys[1]}{numKeys[2]}{numKeys[3]}
-        </div>
-        <div className="row">
-          <RenderNumKey keyName={nums[0]} keyNum={0} onClick={this.zero} />
-          <RenderKey keyName="decimal" keyValue="." onClick={this.dot} />
-          <RenderKey keyName="equals" keyValue="=" onClick={this.equals} />
-        </div>
+
+          <RenderNumKey keyName={nums[0]} keyNum={0} className="item-zero" onClick={this.zero} />
+          <RenderKey keyName="decimal" keyValue="." className="item-dot" onClick={this.dot} />
+          <RenderKey keyName="equals" keyValue="=" className="item-equals" onClick={this.equals} />
+
       </div>
     );
   }
@@ -150,7 +145,7 @@ class RenderKey extends React.Component {
   }
   render(){
     return(
-    <button id={this.props.keyName} onClick={this.props.onClick}>{this.props.keyValue}</button>
+    <button id={this.props.keyName} className={'grid-item key ' + this.props.className} onClick={this.props.onClick}>{this.props.keyValue}</button>
     );
   }
 }
@@ -161,7 +156,7 @@ class RenderNumKey extends React.Component {
   }
   render() {
     return (
-      <button id={this.props.keyName} onClick={this.props.onClick}>{this.props.keyNum}</button>
+      <button id={this.props.keyName} className={'numKey key grid-item ' + this.props.className} onClick={this.props.onClick}>{this.props.keyNum}</button>
     );
   }
 }

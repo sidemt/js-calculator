@@ -1,0 +1,106 @@
+body {
+    --main-white: #DFF3E4;
+    --pale-blue: #7180B9;
+}
+
+.body {
+  background-color: var(--pale-blue);
+  color: #171738;
+  font-family: 'VT323', monospace;
+}
+
+.container-fluid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 10px;
+  text-align: center;
+}
+
+h1 {
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  width: 280px;
+}
+
+.grid-item {
+  border: 1px solid var(--pale-blue);
+  color: var(--main-white);
+  border-radius: 3px;
+}
+
+.item-display {
+  background-color: #171738;
+  color: var(--main-white);
+  font-size: 2.5rem;
+  font-weight: 100;
+  grid-column: 1 / span 4;
+  grid-row: 1;
+  height: 50px;
+  text-align: right;
+  overflow: hidden;
+  padding: 0 8px;
+}
+
+.item-ac {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+}
+
+.item-divide {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.item-multiply {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+.item-subtract {
+  grid-column: 4;
+  grid-row: 3;
+}
+
+.item-add {
+  grid-column: 4;
+  grid-row: 4;
+}
+
+.item-zero {
+  grid-column: 1 / span 2;
+  grid-row: 6;
+}
+
+.item-dot {
+  grid-column: 3;
+  grid-row: 6;
+}
+
+.item-equals {
+  grid-column: 4;
+  grid-row: 5 / span 2;
+}
+
+.key {
+  background-color: #2E1760;
+  font-size: 2rem;
+  font-weight: 100;
+  padding: 15px 25px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.key:hover {
+  background-color: #4CAF50;
+}
+
+.numKey {
+  background-color: #3423A6;
+  color: var(--main-white);
+}

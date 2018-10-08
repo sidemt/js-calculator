@@ -109,35 +109,30 @@ Calculator = function (_React$Component) {_inherits(Calculator, _React$Component
 
       }
       return (
-        React.createElement('div', null, 'Calculator',
+        React.createElement('div', { className: 'grid-container' },
 
-          React.createElement('div', null, 'input: ', this.state.input),
-          React.createElement('div', null, 'calculations: ', this.state.calculations),
-          React.createElement('div', { className: 'row' },
-            React.createElement('div', { id: 'display' }, this.state.calculations, this.state.input)),
+          React.createElement('div', { id: 'display', className: 'grid-item item-display' }, this.state.calculations, this.state.input),
 
 
-          React.createElement('div', { className: 'row' },
-            React.createElement(RenderKey, { keyName: 'clear', keyValue: 'AC', onClick: this.clear }),
-            React.createElement(RenderKey, { keyName: 'divide', keyValue: '/', onClick: this.handleOperator }),
-            React.createElement(RenderKey, { keyName: 'multiply', keyValue: '*', onClick: this.handleOperator }),
-            React.createElement(RenderKey, { keyName: 'add', keyValue: '+', onClick: this.handleOperator }),
-            React.createElement(RenderKey, { keyName: 'subtract', keyValue: '-', onClick: this.handleOperator })),
+
+          React.createElement(RenderKey, { keyName: 'clear', keyValue: 'AC', className: 'item-ac', onClick: this.clear }),
+          React.createElement(RenderKey, { keyName: 'divide', keyValue: '/', className: 'item-divide', onClick: this.handleOperator }),
+          React.createElement(RenderKey, { keyName: 'multiply', keyValue: '*', className: 'item-multiply', onClick: this.handleOperator }),
+          React.createElement(RenderKey, { keyName: 'add', keyValue: '+', className: 'item-add', onClick: this.handleOperator }),
+          React.createElement(RenderKey, { keyName: 'subtract', keyValue: '-', className: 'item-subtract', onClick: this.handleOperator }),
 
 
-          React.createElement('div', { className: 'row' },
-            numKeys[7], numKeys[8], numKeys[9]),
 
-          React.createElement('div', { className: 'row' },
-            numKeys[4], numKeys[5], numKeys[6]),
+          numKeys[7], numKeys[8], numKeys[9],
 
-          React.createElement('div', { className: 'row' },
-            numKeys[1], numKeys[2], numKeys[3]),
 
-          React.createElement('div', { className: 'row' },
-            React.createElement(RenderNumKey, { keyName: nums[0], keyNum: 0, onClick: this.zero }),
-            React.createElement(RenderKey, { keyName: 'decimal', keyValue: '.', onClick: this.dot }),
-            React.createElement(RenderKey, { keyName: 'equals', keyValue: '=', onClick: this.equals }))));
+          numKeys[4], numKeys[5], numKeys[6],
+
+          numKeys[1], numKeys[2], numKeys[3],
+
+          React.createElement(RenderNumKey, { keyName: nums[0], keyNum: 0, className: 'item-zero', onClick: this.zero }),
+          React.createElement(RenderKey, { keyName: 'decimal', keyValue: '.', className: 'item-dot', onClick: this.dot }),
+          React.createElement(RenderKey, { keyName: 'equals', keyValue: '=', className: 'item-equals', onClick: this.equals })));
 
 
 
@@ -150,7 +145,7 @@ RenderKey = function (_React$Component2) {_inherits(RenderKey, _React$Component2
   }_createClass(RenderKey, [{ key: 'render', value: function render()
     {
       return (
-        React.createElement('button', { id: this.props.keyName, onClick: this.props.onClick }, this.props.keyValue));
+        React.createElement('button', { id: this.props.keyName, className: 'grid-item key ' + this.props.className, onClick: this.props.onClick }, this.props.keyValue));
 
     } }]);return RenderKey;}(React.Component);var
 
@@ -161,7 +156,7 @@ RenderNumKey = function (_React$Component3) {_inherits(RenderNumKey, _React$Comp
   }_createClass(RenderNumKey, [{ key: 'render', value: function render()
     {
       return (
-        React.createElement('button', { id: this.props.keyName, onClick: this.props.onClick }, this.props.keyNum));
+        React.createElement('button', { id: this.props.keyName, className: 'numKey key grid-item ' + this.props.className, onClick: this.props.onClick }, this.props.keyNum));
 
     } }]);return RenderNumKey;}(React.Component);
 
