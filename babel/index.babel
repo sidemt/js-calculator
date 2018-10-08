@@ -11,51 +11,25 @@ var nums = {
   9: 'nine'
 }
 
-// Redux:
-const OPERATOR = 'OPERATOR';
-const NUMBER = 'NUMBER';
-const ADD = 'ADD';
-
-const addCalculations = (calc) => {
-  return {
-    type: ADD,
-    calculations: calc
-  }
-};
-
-const calculationReducer = (state = [], action) => {
-  switch(action.type){
-    case ADD:
-      return [...state, action.calclations]
-    default:
-      return state;
-  }
-}
-
-const store = Redux.createStore(calculationReducer);
-
-// React:
-const Provider = ReactRedux.Provider;
-const connect = ReactRedux.connect;
-
-class Presentational extends React.Component {
+class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: '0',
+      input: '',
       calculations: []
     };
     this.handleClick = this.handleClick.bind(this);
+    this.handleOperator = this.handleOperator.bind(this);
     this.clear = this.clear.bind(this);
     this.dot = this.dot.bind(this);
     this.zero = this.zero.bind(this);
     this.calculate = this.calculate.bind(this);
     this.equals = this.equals.bind(this);
-    this.submitCalculation = this.submitCalculation.bind(this);
   };
   clear(){
     this.setState({
-      input: ''
+      input: '0',
+      calculations: []
     });
   }
   dot(){
@@ -77,7 +51,15 @@ class Presentational extends React.Component {
       input: this.state.input + event.target.innerText
     });
   }
+  handleOperator(event){
+    let currentInput = this.state.input;
+    this.setState({
+      input: '',
+      calculations: this.state.calculations.concat(currentInput ,event.target.innerText)
+    });
+  }
   calculate(str){
+    console.log(str);
     if (str != undefined) {
       var f = new Function('return ' + str + ';');
       return f();
@@ -85,16 +67,11 @@ class Presentational extends React.Component {
       return 0; 
     }
   }
-  equals() {
+  equals(event) {
+    let currentInput= this.state.input
     this.setState({
-      input: this.calculate(this.state.input)
-    });
-  }
-  submitCalculation(){
-    const currentCalculation = this.state.input;
-    this.setState({
-      input: '',
-      calculations: this.state.calculations.concat(currentCalculation)
+      input: '0',
+      calculations: this.calculate(this.state.calculations.concat(currentInput).join(''))
     });
   }
   render() {
@@ -112,15 +89,15 @@ class Presentational extends React.Component {
         <div className="row">
           <div id="display">{this.state.input}</div>
         </div>
-
+        
         <div className="row">
           <RenderKey keyName="clear" keyValue="AC" onClick={this.clear} />
-          <RenderKey keyName="divide" keyValue="/" onClick={this.handleClick} />
-          <RenderKey keyName="multiply" keyValue="*" onClick={this.handleClick} />
-          <RenderKey keyName="add" keyValue="+" onClick={this.handleClick} />
-          <RenderKey keyName="subtract" keyValue="-" onClick={this.handleClick} />
+          <RenderKey keyName="divide" keyValue="/" onClick={this.handleOperator} />
+          <RenderKey keyName="multiply" keyValue="*" onClick={this.handleOperator} />
+          <RenderKey keyName="add" keyValue="+" onClick={this.handleOperator} />
+          <RenderKey keyName="subtract" keyValue="-" onClick={this.handleOperator} />
         </div>
-
+        
         <div className="row">
           {numKeys[7]}{numKeys[8]}{numKeys[9]}
         </div>
@@ -134,7 +111,6 @@ class Presentational extends React.Component {
           <RenderNumKey keyName={nums[0]} keyNum={0} onClick={this.zero} />
           <RenderKey keyName="decimal" keyValue="." onClick={this.dot} />
           <RenderKey keyName="equals" keyValue="=" onClick={this.equals} />
-          <RenderKey keyName="submit" keyValue="submit" onClick={this.submitCalculation} />
         </div>
       </div>
     );
@@ -163,32 +139,4 @@ class RenderNumKey extends React.Component {
   }
 }
 
-
-// React-Redux:
-const mapStateToProps = (state) => {
-  return { calculations: state }
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    submitNewCalculations: (newCalc) => {
-      dispatch(addCalculations(newCalc))
-    }
-  }
-};
-
-
-
-const Container = connect(mapStateToProps, mapDispatchToProps)(Presentational);
-
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <Container />
-      </Provider>
-    );
-  }
-};
-
-ReactDOM.render(<AppWrapper />, document.getElementById('calculator'));
+ReactDOM.render(<Calculator />, document.getElementById('calculator'));
