@@ -9,16 +9,18 @@ var nums = {
   7: 'seven',
   8: 'eight',
   9: 'nine'
-}
+};
+
+var operators = ['/', '*', '+', '-'];
 
 class Calculator extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      input: '',
+      input: '0',
       calculations: []
     };
-    this.handleClick = this.handleClick.bind(this);
+    this.handleNumber = this.handleNumber.bind(this);
     this.handleOperator = this.handleOperator.bind(this);
     this.clear = this.clear.bind(this);
     this.dot = this.dot.bind(this);
@@ -33,10 +35,18 @@ class Calculator extends React.Component {
     });
   }
   dot(){
-    if (this.state.input.indexOf(".") == -1) {
+    if (this.state.input == '') {
+      this.setState({
+        input: "0."
+      });
+    } else if (this.state.input.indexOf(".") == -1) {
       this.setState({
         input: this.state.input + "."
       });
+    } else {
+      this.setState({
+        input: this.state.input
+      })
     };
   }
   zero(){
@@ -46,17 +56,33 @@ class Calculator extends React.Component {
       });
     };
   }
-  handleClick(event){
-    this.setState({
-      input: this.state.input + event.target.innerText
-    });
+  handleNumber(event){
+    if (this.state.input == '0') {
+      this.setState({
+        input: event.target.innerText
+      });
+    } else {
+      this.setState({
+        input: this.state.input.toString() + event.target.innerText
+      });
+    }
   }
   handleOperator(event){
     let currentInput = this.state.input;
-    this.setState({
-      input: '',
-      calculations: this.state.calculations.concat(currentInput ,event.target.innerText)
-    });
+    let newCalculations = [...this.state.calculations];
+    if (currentInput == '') {
+      newCalculations.splice(this.state.calculations.length-1, 1,event.target.innerText);
+      this.setState({
+        input: '',
+        calculations: newCalculations
+      });
+      console.log(this.state.calculations);
+    } else {
+      this.setState({
+        input: '',
+        calculations: newCalculations.concat(currentInput ,event.target.innerText)
+      });
+    }
   }
   calculate(str){
     console.log(str);
@@ -64,21 +90,22 @@ class Calculator extends React.Component {
       var f = new Function('return ' + str + ';');
       return f();
     } else {
-      return 0; 
+      return '0'; 
     }
   }
   equals(event) {
-    let currentInput= this.state.input
+    let currentInput= this.state.input;
+    let currentCalculations = this.state.calculations;
     this.setState({
-      input: '0',
-      calculations: this.calculate(this.state.calculations.concat(currentInput).join(''))
+      input: this.calculate(currentCalculations.concat(currentInput).join('')),
+      calculations: []
     });
   }
   render() {
     var numKeys = [];
     for (let i=0; i<=9; i++) {
       numKeys.push(
-        <RenderNumKey keyName={nums[i]} keyNum={i} onClick={this.handleClick} />
+        <RenderNumKey keyName={nums[i]} keyNum={i} onClick={this.handleNumber} />
       )
     }
     return(
@@ -87,7 +114,7 @@ class Calculator extends React.Component {
         <div>input: {this.state.input}</div>
         <div>calculations: {this.state.calculations}</div>
         <div className="row">
-          <div id="display">{this.state.input}</div>
+          <div id="display">{this.state.calculations}{this.state.input}</div>
         </div>
         
         <div className="row">
