@@ -1,0 +1,164 @@
+var nums = {
+  0: 'zero',
+  1: 'one',
+  2: 'two',
+  3: 'three',
+  4: 'four',
+  5: 'five',
+  6: 'six',
+  7: 'seven',
+  8: 'eight',
+  9: 'nine'
+};
+
+var operators = ['/', '*', '+', '-'];
+
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: '0',
+      calculations: []
+    };
+    this.handleNumber = this.handleNumber.bind(this);
+    this.handleOperator = this.handleOperator.bind(this);
+    this.clear = this.clear.bind(this);
+    this.dot = this.dot.bind(this);
+    this.zero = this.zero.bind(this);
+    this.calculate = this.calculate.bind(this);
+    this.equals = this.equals.bind(this);
+  };
+  clear(){
+    this.setState({
+      input: '0',
+      calculations: []
+    });
+  }
+  dot(){
+    if (this.state.input == '') {
+      this.setState({
+        input: "0."
+      });
+    } else if (this.state.input.indexOf(".") == -1) {
+      this.setState({
+        input: this.state.input + "."
+      });
+    } else {
+      this.setState({
+        input: this.state.input
+      })
+    };
+  }
+  zero(){
+    if (this.state.input != '0') {
+      this.setState({
+        input: this.state.input + '0'
+      });
+    };
+  }
+  handleNumber(event){
+    if (this.state.input == '0') {
+      this.setState({
+        input: event.target.innerText
+      });
+    } else {
+      this.setState({
+        input: this.state.input.toString() + event.target.innerText
+      });
+    }
+  }
+  handleOperator(event){
+    let currentInput = this.state.input;
+    let newCalculations = [...this.state.calculations];
+    if (currentInput == '') {
+      newCalculations.splice(this.state.calculations.length-1, 1,event.target.innerText);
+      this.setState({
+        input: '',
+        calculations: newCalculations
+      });
+      console.log(this.state.calculations);
+    } else {
+      this.setState({
+        input: '',
+        calculations: newCalculations.concat(currentInput ,event.target.innerText)
+      });
+    }
+  }
+  calculate(str){
+    console.log(str);
+    if (str != undefined) {
+      var f = new Function('return ' + str + ';');
+      return f();
+    } else {
+      return '0'; 
+    }
+  }
+  equals(event) {
+    let currentInput= this.state.input;
+    let currentCalculations = this.state.calculations;
+    this.setState({
+      input: this.calculate(currentCalculations.concat(currentInput).join('')),
+      calculations: []
+    });
+  }
+  render() {
+    var numKeys = [];
+    for (let i=0; i<=9; i++) {
+      numKeys.push(
+        <RenderNumKey keyName={nums[i]} keyNum={i} onClick={this.handleNumber} />
+      )
+    }
+    return(
+      <div className="grid-container">
+
+          <div id="display" className="grid-item item-display">{this.state.calculations}{this.state.input}</div>
+
+        
+
+          <RenderKey keyName="clear" keyValue="AC" className="item-ac" onClick={this.clear} />
+          <RenderKey keyName="divide" keyValue="/" className="item-divide" onClick={this.handleOperator} />
+          <RenderKey keyName="multiply" keyValue="*" className="item-multiply" onClick={this.handleOperator} />
+          <RenderKey keyName="add" keyValue="+" className="item-add" onClick={this.handleOperator} />
+          <RenderKey keyName="subtract" keyValue="-" className="item-subtract"  onClick={this.handleOperator} />
+
+        
+
+          {numKeys[7]}{numKeys[8]}{numKeys[9]}
+
+
+          {numKeys[4]}{numKeys[5]}{numKeys[6]}
+
+          {numKeys[1]}{numKeys[2]}{numKeys[3]}
+
+          <RenderNumKey keyName={nums[0]} keyNum={0} className="item-zero" onClick={this.zero} />
+          <RenderKey keyName="decimal" keyValue="." className="item-dot" onClick={this.dot} />
+          <RenderKey keyName="equals" keyValue="=" className="item-equals" onClick={this.equals} />
+
+      </div>
+    );
+  }
+};
+
+class RenderKey extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render(){
+    return(
+    <button id={this.props.keyName} className={'grid-item key ' + this.props.className} onClick={this.props.onClick}>{this.props.keyValue}</button>
+    );
+  }
+}
+
+class RenderNumKey extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <button id={this.props.keyName} className={'numKey key grid-item ' + this.props.className} onClick={this.props.onClick}>{this.props.keyNum}</button>
+    );
+  }
+}
+
+ReactDOM.render(<Calculator />, document.getElementById('calculator'));
